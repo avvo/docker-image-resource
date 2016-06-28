@@ -6,6 +6,8 @@ set -e
 exec 3>&1 # make stdout available as fd 3 for the result
 exec 1>&2 # redirect all output to stderr for logging
 
+env
+
 source $(dirname $0)/common.sh
 
 source=$1
@@ -43,11 +45,14 @@ certs_to_file "$ca_certs"
 
 docker_host=$(jq -r '.params.dockerhost // ""' < $payload)
 if [ -n "${docker_host}" ]; then
-  DOCKER_HOST=$docker_host
+  unset DOCKER_HOST
+  export DOCKER_HOST=$docker_host
   echo "using DOCKER_HOST ${DOCKER_HOST}"
 else
   start_docker "$insecure_registries" "$registry_mirror"
 fi
+
+env
 
 # debug docker versions
 docker version
