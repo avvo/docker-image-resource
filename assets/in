@@ -45,7 +45,13 @@ skip_download="$(jq -r '.params.skip_download // false' < $payload)"
 save="$(jq -r '.params.save // false' < $payload)"
 
 certs_to_file "$ca_certs"
-start_docker "$insecure_registries" "$registry_mirror"
+
+docker_host=$(jq -r '.params.dockerhost // ""' < $payload)
+if [ -n "${docker_host}" ]; then
+  DOCKERHOST=$docker_host
+else
+  start_docker "$insecure_registries" "$registry_mirror"
+fi
 
 mkdir -p $destination
 

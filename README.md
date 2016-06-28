@@ -80,6 +80,9 @@ The following files will be placed in the destination:
 * `skip_download`: *Optional.* Skip `docker pull` of image. Only `/image-id`,
   `/repository`, and `/tag` will be populated. `/image` and `/rootfs.tar` will
   not be present.
+* `dockerhost`: *Optional.* Docker host to use for builds. If not set, will created
+    its own docker daemon internally and will require being privileged.
+
 
 
 ### `out`: Push an image, or build and push a `Dockerfile`.
@@ -121,6 +124,9 @@ version is the image's digest.
   numbers.
 
 * `tag_as_latest`: *Optional.*  Default `false`. If true, the pushed image will be tag as latest too and tag will be push.
+
+* `dockerhost`: *Optional.* Docker host to use for builds. If not set, will created
+  its own docker daemon internally and will require being privileged.
 
 
 ## Example
