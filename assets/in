@@ -54,6 +54,9 @@ else
   start_docker "$insecure_registries" "$registry_mirror"
 fi
 
+# debug docker versions
+docker version
+
 mkdir -p $destination
 
 image_name="${repository}@${digest}"

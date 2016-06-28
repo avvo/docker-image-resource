@@ -49,6 +49,9 @@ else
   start_docker "$insecure_registries" "$registry_mirror"
 fi
 
+# debug docker versions
+docker version
+
 if [ -n "${username}" ] && [ -n "${password}" ]; then
   docker login -u "${username}" -p "${password}" ${registry}
 fi
