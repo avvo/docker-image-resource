@@ -48,7 +48,8 @@ certs_to_file "$ca_certs"
 
 docker_host=$(jq -r '.params.dockerhost // ""' < $payload)
 if [ -n "${docker_host}" ]; then
-  DOCKERHOST=$docker_host
+  DOCKER_HOST=$docker_host
+  echo "using DOCKER_HOST ${DOCKER_HOST}"
 else
   start_docker "$insecure_registries" "$registry_mirror"
 fi
