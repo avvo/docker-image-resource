@@ -76,6 +76,10 @@ if [ "$skip_download" = "false" ]; then
 
   if [ -n "${docker_host}" ]; then
     echo "skipping metadata"
+    jq -n "{
+      user: \"someuser\",
+      env: []
+    }" > ${destination}/metadata.json
     if [ "$rootfs" = "true" ]; then
       echo "skipping rootfx"
     fi
