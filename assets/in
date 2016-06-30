@@ -82,7 +82,7 @@ if [ "$skip_download" = "false" ]; then
 
     docker run \
       --cidfile=/tmp/container.cid \
-      --entrypoint /bin/bash  \
+      --entrypoint /bin/sh  \
       "$image_name" -c env
   else
     docker run \
