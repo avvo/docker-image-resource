@@ -46,7 +46,7 @@ save="$(jq -r '.params.save // false' < $payload)"
 
 certs_to_file "$ca_certs"
 
-docker_host=$(jq -r '.params.dockerhost // ""' < $payload)
+docker_host=$(jq -r '.source.dockerhost // ""' < $payload)
 if [ -n "${docker_host}" ]; then
   DOCKER_HOST=$docker_host
   echo "using DOCKER_HOST ${DOCKER_HOST}"
