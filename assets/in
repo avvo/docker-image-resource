@@ -73,11 +73,16 @@ if [ "$skip_download" = "false" ]; then
     docker save -o ${destination}/image "$image_name"
   fi
 
-  docker run \
-    --cidfile=/tmp/container.cid \
-    -v /opt/resource/print-metadata:/tmp/print-metadata \
-    --entrypoint /tmp/print-metadata  \
-    "$image_name" > ${destination}/metadata.json
+
+  if [ -n "${docker_host}" ]; then
+    echo "skipping metadata"
+  else
+    docker run \
+      --cidfile=/tmp/container.cid \
+      -v /opt/resource/print-metadata:/tmp/print-metadata \
+      --entrypoint /tmp/print-metadata  \
+      "$image_name" > ${destination}/metadata.json
+  fi
 
   mkdir -p ${destination}/rootfs/
   docker export $(cat /tmp/container.cid) | tar -xf - -C ${destination}/rootfs/
