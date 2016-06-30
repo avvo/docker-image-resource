@@ -76,19 +76,22 @@ if [ "$skip_download" = "false" ]; then
 
   if [ -n "${docker_host}" ]; then
     echo "skipping metadata"
+    if [ "$rootfs" = "true" ]; then
+      echo "skipping rootfx"
+    fi
   else
     docker run \
       --cidfile=/tmp/container.cid \
       -v /opt/resource/print-metadata:/tmp/print-metadata \
       --entrypoint /tmp/print-metadata  \
       "$image_name" > ${destination}/metadata.json
-  fi
 
-  mkdir -p ${destination}/rootfs/
-  docker export $(cat /tmp/container.cid) | tar -xf - -C ${destination}/rootfs/
+    mkdir -p ${destination}/rootfs/
+    docker export $(cat /tmp/container.cid) | tar -xf - -C ${destination}/rootfs/
 
-  if [ "$rootfs" = "true" ]; then
-    docker export $(cat /tmp/container.cid) > ${destination}/rootfs.tar
+    if [ "$rootfs" = "true" ]; then
+      docker export $(cat /tmp/container.cid) > ${destination}/rootfs.tar
+    fi
   fi
 fi
 
