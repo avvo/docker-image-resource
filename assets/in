@@ -80,23 +80,27 @@ if [ "$skip_download" = "false" ]; then
       user: \"someuser\",
       env: []
     }" > ${destination}/metadata.json
-    if [ "$rootfs" = "true" ]; then
-      echo "skipping rootfx"
-    fi
+
+    docker run \
+      --cidfile=/tmp/container.cid \
+      --entrypoint /bin/bash  \
+      "$image_name" -c env
   else
     docker run \
       --cidfile=/tmp/container.cid \
       -v /opt/resource/print-metadata:/tmp/print-metadata \
       --entrypoint /tmp/print-metadata  \
       "$image_name" > ${destination}/metadata.json
-
-    mkdir -p ${destination}/rootfs/
-    docker export $(cat /tmp/container.cid) | tar -xf - -C ${destination}/rootfs/
-
-    if [ "$rootfs" = "true" ]; then
-      docker export $(cat /tmp/container.cid) > ${destination}/rootfs.tar
-    fi
   fi
+
+  mkdir -p ${destination}/rootfs/
+  docker export $(cat /tmp/container.cid) | tar -xf - -C ${destination}/rootfs/
+
+  if [ "$rootfs" = "true" ]; then
+    docker export $(cat /tmp/container.cid) > ${destination}/rootfs.tar
+  fi
+
+  docker rm -f $(cat /tmp/container.cid)
 fi
 
 image_id="$(image_from_digest "$repository" "$digest")"
