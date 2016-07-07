@@ -29,8 +29,17 @@ registry_mirror=$(jq -r '.source.registry_mirror // ""' < $payload)
 username=$(jq -r '.source.username // ""' < $payload)
 password=$(jq -r '.source.password // ""' < $payload)
 repository="$(jq -r '.source.repository // ""' < $payload)"
+tag_prefix_command=$(jq -r '.params.tag_prefix_command // ""' < $payload)
 tag="$(jq -r '.source.tag // "latest"' < $payload)"
 ca_certs=$(jq -r '.source.ca_certs // []' < $payload)
+
+if [ -n "$tag_prefix_command "]; then
+  tag_prefix=$(sh -c "$tag_prefix_command")
+  tag="${tag_prefix}${tag}"
+fi
+
+echo "tag prefix is ${tag_prefix}; tag is ${tag}"
+
 
 if private_registry "${repository}" ; then
   registry="$(extract_registry "${repository}")"
