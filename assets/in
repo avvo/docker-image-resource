@@ -33,7 +33,7 @@ tag_prefix_command=$(jq -r '.params.tag_prefix_command // ""' < $payload)
 tag="$(jq -r '.source.tag // "latest"' < $payload)"
 ca_certs=$(jq -r '.source.ca_certs // []' < $payload)
 
-if [ -n "$tag_prefix_command "]; then
+if [ -n "$tag_prefix_command" ]; then
   tag_prefix=$(sh -c "$tag_prefix_command")
   tag="${tag_prefix}${tag}"
 fi
