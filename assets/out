@@ -65,7 +65,7 @@ tag_source=$(jq -r '.source.tag // "latest"' < $payload)
 tag_params=$(jq -r '.params.tag // ""' < $payload)
 tag_prefix_command=$(jq -r '.params.tag_prefix_command // ""' < $payload)
 if [ -n "$tag_prefix_command" ]; then
-  tag_prefix=$(sh -c tag_prefix_command)
+  tag_prefix=$(sh -c "$tag_prefix_command")
 else
   tag_prefix=$(jq -r '.params.tag_prefix // ""' < $payload)
 fi
