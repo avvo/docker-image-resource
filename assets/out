@@ -69,7 +69,6 @@ if [ -n "$tag_prefix_command" ]; then
 else
   tag_prefix=$(jq -r '.params.tag_prefix // ""' < $payload)
 fi
-echo "tag prefix is ${tag_prefix}"
 need_tag_as_latest=$(jq -r '.params.tag_as_latest // "false"' < $payload)
 
 
@@ -81,8 +80,9 @@ if [ -n "$tag_params" ]; then
   fi
   tag_name="${tag_prefix}$(cat $tag_params)"
 else
-  tag_name="$tag_source"
+  tag_name="${tag_prefix}${tag_source}"
 fi
+echo "tag prefix is ${tag_prefix}; tag_name is ${tag_name}"
 
 if [ -z "$repository" ]; then
   echo "must specify repository"
